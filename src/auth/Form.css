@@ -1,10 +1,59 @@
+.row {
+  margin-right: 0px !important;
+}
+ 
+.Bgcolor {
+  background-color: whitesmoke;
+}
+.footercolor{
+  background-color: whitesmoke;
+}
 .button-right {
   position: absolute;
   right: 40px;
 }
-.border-welcome{
- border:solid
+.border-welcome {
+  border: 2px solid black;
+  background-color:white;
 }
+.welcome {
+  font-size: x-large;
+  -webkit-text-stroke: thin;
+  background-color:white;
+}
+.profile {
+  font-size: x-large;
+  text-transform: uppercase;
+}
+.form-border {
+  /* border: ridge; */
+  margin-top: 20px;
+  border: 1px solid black;
+  padding: 20px;
+  -webkit-text-stroke-width: thin;
+  background-color:white;
+}
+.textset{
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  justify-content: space-between;
+  /* font-size: large; */
+}
+.sizetext{
+  font-size: initial;
+}
+.formsubmit{
+  position: absolute;
+  right: 40px;
+}
+.buttonsubmit{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+
 /* .fa {
   padding: 20px;
   font-size: 30px;

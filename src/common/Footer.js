@@ -3,7 +3,7 @@ import "../auth/Form.css";
 
 const Footer = () => {
   return (
-    <div>
+    <div className="footercolor">
       <footer className="page-footer font-small mdb-color lighten-3 pt-4">
         <div className="container text-center text-md-left">
           <div className="row">
@@ -12,10 +12,10 @@ const Footer = () => {
                 Follow Us
               </h5>
               <a>
-                <i class="fa fa-linkedin fa-lg" aria-hidden="true"></i>
-                <i class="fa fa-facebook-official ml-2 fa-lg" aria-hidden="true"></i>
-                <i class="fa fa-instagram ml-2 fa-lg" aria-hidden="true"></i>
-                <i class="fa fa-envelope ml-2 fa-lg" aria-hidden="true"></i>
+                <i className="fa fa-linkedin fa-lg" aria-hidden="true"></i>
+                <i className="fa fa-facebook-official ml-2 fa-lg" aria-hidden="true"></i>
+                <i className="fa fa-instagram ml-2 fa-lg" aria-hidden="true"></i>
+                <i className="fa fa-envelope ml-2 fa-lg" aria-hidden="true"></i>
               </a>
             </div>
           </div>

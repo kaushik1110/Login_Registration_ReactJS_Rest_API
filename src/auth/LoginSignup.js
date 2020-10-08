@@ -18,7 +18,6 @@ const LoginSignup = () => {
   const history = useHistory();
 
   const onSubmitForm = (event) => {
-    debugger
     console.log(process.env.REACT_APP_LINK);
     event.preventDefault();
     axios
