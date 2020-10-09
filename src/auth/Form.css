@@ -4,6 +4,7 @@
  
 .Bgcolor {
   background-color: whitesmoke;
+  height: 850px;
 }
 .footercolor{
   background-color: whitesmoke;
@@ -53,7 +54,12 @@
   justify-content: flex-end;
   margin-right: 30px;
 }
-
+.footerPosition{
+  /* position: fixed;  */
+  bottom: 0;
+  width: 100%;
+   text-align: center;
+} 
 /* .fa {
   padding: 20px;
   font-size: 30px;
@@ -138,8 +144,15 @@ h1 {
     margin-right: 10px;
 }
 
-.footer {
-    min-height: calc(100vh - 40px);
-}
 
- */
+*/
+  /* .footer { 
+     min-height: calc(100vh - 40px);
+     position: fixed;
+     left: 0;
+     bottom: 0;
+     width: 100%;
+     /* background-color: red; */
+     /* color: white; */
+     /* text-align: center; */
+  /* }  */

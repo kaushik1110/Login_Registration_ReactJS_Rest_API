@@ -9,13 +9,13 @@ import { Formik, Form } from "formik";
 import "../auth/Form.css";
 
 const Profile = () => {
-  const token = localStorage.getItem("login");
   const [profile, setProfile] = useState({
     name: "",
     email: "",
     image: "",
     isEditSubmit: false,
   });
+  const token = localStorage.getItem("login");
 
   const cityOption = [
     { key: "Select city", value: "" },
@@ -77,7 +77,6 @@ const Profile = () => {
   };
 
   const editHandler = (event) => {
-    // console.log("edit data", values);
     event.preventDefault();
     setProfile({
       ...profile,
@@ -216,7 +215,9 @@ const Profile = () => {
                   {/* </> */}
                 </div>
               </div>
+              <div className="footerPosition">
               <Footer />
+              </div>
             </div>
           )}
           {!token && <LoginSignup />}
