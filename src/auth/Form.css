@@ -21,6 +21,8 @@
   font-size: x-large;
   -webkit-text-stroke: thin;
   background-color:white;
+  height: 40px;
+  margin-top: 10px;
 }
 .profile {
   font-size: x-large;

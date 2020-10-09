@@ -15,76 +15,14 @@ const Profile = () => {
     image: "",
     isEditSubmit: false,
   });
-  const token = localStorage.getItem("login");
-
-  const cityOption = [
-    { key: "Select city", value: "" },
-    { key: "Surat", value: "Surat" },
-    { key: "Amdavad", value: "Amdavad" },
-    { key: "Rajkot", value: "Rajkot" },
-  ];
-  const stateOption = [
-    { key: "Select state", value: "" },
-    { key: "Gujarat", value: "Gujarat" },
-    { key: "Maharashtra", value: "Maharashtra" },
-    { key: "Rajasthan", value: "Rajasthan" },
-  ];
-  const countryOption = [
-    { key: "Select country", value: "" },
-    { key: "India", value: "India" },
-    { key: "US", value: "US" },
-    { key: "Germany", value: "Germany" },
-  ];
-  const genderOption = [
-    { key: "Male", value: "Male" },
-    { key: "Female", value: "Female" },
-  ];
-  const hobbyOptions = [
-    { key: "Option 1", value: "Option 1" },
-    { key: "Option 2", value: "Option 2" },
-    { key: "Option 3", value: "Option 3" },
-  ];
-  const initialValues = {
-    name: "",
-    address: "",
-    selectOption: "",
-    selectCity: "",
-    selectState: "",
-    genderOption: "",
-    cityOption: "",
-    stateOption: "",
-    checkBoxOption: [],
-    birthDate: null,
-    fname: "",
-  };
-
-  const validationSchema = Yup.object({
-    name: Yup.string().required("Required !"),
-    address: Yup.string().required("Required !"),
-    selectOption: Yup.string().required("Required !"),
-    selectCity: Yup.string().required("Required !"),
-    selectState: Yup.string().required("Required !"),
-    genderOption: Yup.string().required("Required !"),
-    cityOption: Yup.string().required("Required !"),
-    stateOption: Yup.string().required("Required !"),
-    checkBoxOption: Yup.array().required("Required !"),
-    birthDate: Yup.date().required("Required !").nullable(),
-    fname: Yup.string().required("Required !"),
+  const [editField, setEditField] = useState({
+    countrySelect: [],
   });
 
-  const onSubmit = (values) => {
-    console.log("submit data", values);
-  };
-
-  const editHandler = (event) => {
-    event.preventDefault();
-    setProfile({
-      ...profile,
-      isEditSubmit: !profile.isEditSubmit,
-    });
-  };
+  const token = localStorage.getItem("login");
 
   useEffect(() => {
+    // API-1
     axios
       .get(`${process.env.REACT_APP_LINK}/test`, {
         headers: {
@@ -101,7 +39,87 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [1]);
+
+    // API-2
+    axios
+      .get(`http://localhost:8000`)
+      .then((res) => {
+        console.log(res.data);
+        // debugger;
+        setEditField({
+          countrySelect: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // const cityOption = [
+  //   { key: "Select city", value: "" },
+  //   { key: "Surat", value: "Surat" },
+  //   { key: "Amdavad", value: "Amdavad" },
+  //   { key: "Rajkot", value: "Rajkot" },
+  // ];
+  // const stateOption = [
+  //   { key: "Select state", value: "" },
+  //   { key: "Gujarat", value: "Gujarat" },
+  //   { key: "Maharashtra", value: "Maharashtra" },
+  //   { key: "Rajasthan", value: "Rajasthan" },
+  // ];
+  // const countryOption = [
+  // { key: editField.countrySelect, value: editField.countrySelect },
+  // { key: "Select country", value: "" },
+  // { key: "India", value: "India" },
+  // { key: "US", value: "US" },
+  // { key: "Germany", value: "Germany" },
+  // ];
+  const genderOption = [
+    { key: "Male", value: "Male" },
+    { key: "Female", value: "Female" },
+  ];
+  const hobbyOptions = [
+    { key: "Option 1", value: "Option 1" },
+    { key: "Option 2", value: "Option 2" },
+    { key: "Option 3", value: "Option 3" },
+  ];
+  const initialValues = {
+    name: "",
+    address: "",
+    selectCountry: "",
+    selectCity: "",
+    selectState: "",
+    genderOption: "",
+    cityOption: "",
+    stateOption: "",
+    checkBoxOption: [],
+    birthDate: null,
+    fname: "",
+  };
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Required !"),
+    address: Yup.string().required("Required !"),
+    selectCountry: Yup.string().required("Required !"),
+    selectCity: Yup.string().required("Required !"),
+    selectState: Yup.string().required("Required !"),
+    genderOption: Yup.string().required("Required !"),
+    checkBoxOption: Yup.array().required("Required !"),
+    birthDate: Yup.date().required("Required !").nullable(),
+    fname: Yup.string().required("Required !"),
+  });
+
+  const onSubmit = (values) => {
+    console.log("submit data", values);
+  };
+
+  const editHandler = () => {
+    setProfile({
+      ...profile,
+      isEditSubmit: !profile.isEditSubmit,
+    });
+  };
+  console.log(editField);
 
   return (
     <Formik
@@ -126,7 +144,7 @@ const Profile = () => {
                   ></img>
                   <button
                     type=""
-                    className="text-white btn-dark w-75 ml-5 mt-3"
+                    className="text-white btn-dark w-75  ml-4 mt-3 "
                     onClick={editHandler}
                   >
                     Edit Profile
@@ -138,7 +156,7 @@ const Profile = () => {
                     Profile
                   </p>
                   <div className="border-welcome">
-                    <p className="welcome text-center ">
+                    <p className="welcome text-center">
                       Welcome {profile.name} !
                     </p>
                   </div>
@@ -162,25 +180,26 @@ const Profile = () => {
                           label="Pincode"
                           type="number"
                           fields={6}
-                          name="name"
+                          name="pincode"
                         />
-                        <FormikControl
+                        {/* <FormikControl
                           control="select"
                           label="City"
                           name="selectCity"
-                          options={cityOption}
+                          // options={cityOption}
                         />
                         <FormikControl
                           control="select"
                           label="State"
                           name="selectState"
-                          options={stateOption}
-                        />
+                          // options={stateOption}
+                        /> */}
                         <FormikControl
                           control="select"
                           label="Country"
-                          name="selectOption"
-                          options={countryOption}
+                          name="selectCountry"
+                          options={editField.countryOption}
+                          // options={countryOption}
                         />
                         <FormikControl
                           control="date"
@@ -216,7 +235,7 @@ const Profile = () => {
                 </div>
               </div>
               <div className="footerPosition">
-              <Footer />
+                <Footer />
               </div>
             </div>
           )}
