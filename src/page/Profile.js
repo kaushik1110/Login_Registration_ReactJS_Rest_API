@@ -16,11 +16,23 @@ const Profile = () => {
     isEditSubmit: false,
   });
   const [editField, setEditField] = useState({
+    address: "",
+    genderOption: "",
+    pincode: "",
+    selectCountry: "",
+    birthDate: "",
+    checkBoxOption: "",
     countrySelect: [],
-    stateSelect:[],
   });
 
   const token = localStorage.getItem("login");
+
+  // const editChangeHandler = (event) => {
+  //   setEditField({
+  //       ...editField,
+  //       [event.target.name]: event.target.value,
+  //   });
+  // };
 
   useEffect(() => {
     // API-1
@@ -54,7 +66,6 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-
   }, []);
 
   // const cityOption = [
@@ -88,6 +99,7 @@ const Profile = () => {
   const initialValues = {
     name: "",
     address: "",
+    pincode: "",
     selectCountry: "",
     selectCity: "",
     selectState: "",
@@ -102,10 +114,11 @@ const Profile = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required("Required !"),
     address: Yup.string().required("Required !"),
-    selectCountry: Yup.string().required("Required !"),
-    selectCity: Yup.string().required("Required !"),
-    selectState: Yup.string().required("Required !"),
+    // selectCountry: Yup.string().required("Required !"),
+    // selectCity: Yup.string().required("Required !"),
+    // selectState: Yup.string().required("Required !"),
     genderOption: Yup.string().required("Required !"),
+    pincode: Yup.string().required("Required !"),
     checkBoxOption: Yup.array().required("Required !"),
     birthDate: Yup.date().required("Required !").nullable(),
     fname: Yup.string().required("Required !"),
@@ -113,10 +126,12 @@ const Profile = () => {
 
   const onSubmit = (values) => {
     console.log("submit data", values);
+    console.log("valuessss");
+    debugger;
   };
 
-  const editHandler = () => {
-    debugger;
+  const editButtonHandler = () => {
+    
     setProfile({
       ...profile,
       isEditSubmit: !profile.isEditSubmit,
@@ -129,7 +144,7 @@ const Profile = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={onSubmit}
+      onSubmit={() => onSubmit()}
     >
       {(formik) => (
         <div>
@@ -149,7 +164,7 @@ const Profile = () => {
                   <button
                     type=""
                     className="text-white btn-dark w-75  ml-4 mt-3 "
-                    onClick={editHandler}
+                    onClick={editButtonHandler}
                   >
                     Edit Profile
                   </button>
@@ -167,8 +182,9 @@ const Profile = () => {
                   {/* <p className="text-center">Email : {profile.email}</p> */}
                   {profile.isEditSubmit && (
                     <>
-                      <Form className="form-border rounded mb-0">
+                      <Form className="form-border rounded mb-0"  >
                         <FormikControl
+                          className="w-250"
                           control="textarea"
                           label="Address"
                           name="address"
@@ -181,9 +197,9 @@ const Profile = () => {
                         />
                         <FormikControl
                           control="input"
+                          name="pincode"
                           label="Pincode"
-                          type="number"
-                          fields={6}
+                          type="text"
                           name="pincode"
                         />
                         {/* <FormikControl
@@ -192,12 +208,12 @@ const Profile = () => {
                           name="selectCity"
                           options={cityOption}
                         /> */}
-                        <FormikControl
+                        {/* <FormikControl
                           control="select"
                           label="State"
                           name="selectState"
                           options={editField.stateSelect}
-                        />
+                        /> */}
                         <FormikControl
                           control="select"
                           label="Country"
@@ -215,17 +231,11 @@ const Profile = () => {
                           name="checkBoxOption"
                           options={hobbyOptions}
                         />
-
-                        {/* <FormikControl
-                      control="chakrainput"
-                      label="Full name"
-                      name="fname"
-                    /> */}
                         <div className="buttonsubmit">
                           <button
                             className="textset text-white btn btn-dark mt-1"
                             type="submit"
-                            // style={{float: 'right'}}
+                            // onSubmit={() => onSubmit()}
                           >
                             Submit
                           </button>
@@ -239,6 +249,7 @@ const Profile = () => {
               </div>
               <div className="footerPosition">
                 <Footer />
+                
               </div>
             </div>
           )}
