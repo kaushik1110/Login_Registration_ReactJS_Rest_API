@@ -17,6 +17,7 @@ const Profile = () => {
   });
   const [editField, setEditField] = useState({
     countrySelect: [],
+    stateSelect:[],
   });
 
   const token = localStorage.getItem("login");
@@ -53,6 +54,7 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
+
   }, []);
 
   // const cityOption = [
@@ -114,12 +116,14 @@ const Profile = () => {
   };
 
   const editHandler = () => {
+    debugger;
     setProfile({
       ...profile,
       isEditSubmit: !profile.isEditSubmit,
+      // !profile.isEditSubmit,
     });
   };
-  console.log(editField);
+  // console.log(editField);
 
   return (
     <Formik
@@ -186,20 +190,19 @@ const Profile = () => {
                           control="select"
                           label="City"
                           name="selectCity"
-                          // options={cityOption}
-                        />
+                          options={cityOption}
+                        /> */}
                         <FormikControl
                           control="select"
                           label="State"
                           name="selectState"
-                          // options={stateOption}
-                        /> */}
+                          options={editField.stateSelect}
+                        />
                         <FormikControl
                           control="select"
                           label="Country"
                           name="selectCountry"
-                          options={editField.countryOption}
-                          // options={countryOption}
+                          options={editField.countrySelect}
                         />
                         <FormikControl
                           control="date"
