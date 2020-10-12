@@ -16,13 +16,8 @@ const Profile = () => {
     isEditSubmit: false,
   });
   const [editField, setEditField] = useState({
-    address: "",
-    genderOption: "",
-    pincode: "",
-    selectCountry: "",
-    birthDate: "",
-    checkBoxOption: "",
     countrySelect: [],
+    stateSelect: [],
   });
 
   const token = localStorage.getItem("login");
@@ -39,7 +34,8 @@ const Profile = () => {
     axios
       .get(`${process.env.REACT_APP_LINK}/test`, {
         headers: {
-          "authentication-token": token,
+          "authentication-token": `${token}`,
+          "Content-Type": "application/json",
         },
       })
       .then((res) => {
@@ -52,21 +48,7 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-
-    // API-2
-    axios
-      .get(`http://localhost:8000`)
-      .then((res) => {
-        console.log(res.data);
-        // debugger;
-        setEditField({
-          countrySelect: res.data,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  }, [profile.name, profile.email, profile.image]);
 
   // const cityOption = [
   //   { key: "Select city", value: "" },
@@ -74,19 +56,7 @@ const Profile = () => {
   //   { key: "Amdavad", value: "Amdavad" },
   //   { key: "Rajkot", value: "Rajkot" },
   // ];
-  // const stateOption = [
-  //   { key: "Select state", value: "" },
-  //   { key: "Gujarat", value: "Gujarat" },
-  //   { key: "Maharashtra", value: "Maharashtra" },
-  //   { key: "Rajasthan", value: "Rajasthan" },
-  // ];
-  // const countryOption = [
-  // { key: editField.countrySelect, value: editField.countrySelect },
-  // { key: "Select country", value: "" },
-  // { key: "India", value: "India" },
-  // { key: "US", value: "US" },
-  // { key: "Germany", value: "Germany" },
-  // ];
+
   const genderOption = [
     { key: "Male", value: "Male" },
     { key: "Female", value: "Female" },
@@ -97,7 +67,6 @@ const Profile = () => {
     { key: "Option 3", value: "Option 3" },
   ];
   const initialValues = {
-    name: "",
     address: "",
     pincode: "",
     selectCountry: "",
@@ -105,14 +74,11 @@ const Profile = () => {
     selectState: "",
     genderOption: "",
     cityOption: "",
-    stateOption: "",
     checkBoxOption: [],
     birthDate: null,
-    fname: "",
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Required !"),
     address: Yup.string().required("Required !"),
     // selectCountry: Yup.string().required("Required !"),
     // selectCity: Yup.string().required("Required !"),
@@ -121,24 +87,48 @@ const Profile = () => {
     pincode: Yup.string().required("Required !"),
     checkBoxOption: Yup.array().required("Required !"),
     birthDate: Yup.date().required("Required !").nullable(),
-    fname: Yup.string().required("Required !"),
   });
 
-  const onSubmit = (values) => {
-    console.log("submit data", values);
-    console.log("valuessss");
-    debugger;
-  };
-
   const editButtonHandler = () => {
-    
     setProfile({
       ...profile,
       isEditSubmit: !profile.isEditSubmit,
-      // !profile.isEditSubmit,
     });
+    // API-2 Country Data
+    axios
+      .get(`http://localhost:8000`)
+      .then((res) => {
+        console.log(res.data);
+        debugger;
+        setEditField({
+          countrySelect: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  // console.log(editField);
+
+  const stateData = (value) => {
+    debugger;
+    console.log(value);
+    // API-3
+    axios
+      .post(`http://localhost:8000/${value}`)
+      .then((res) => {
+        debugger;
+        setEditField({
+          stateSelect: res && res.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const onSubmit = (values) => {
+    console.log("submit data", values);
+    // debugger;
+  };
 
   return (
     <Formik
@@ -182,45 +172,55 @@ const Profile = () => {
                   {/* <p className="text-center">Email : {profile.email}</p> */}
                   {profile.isEditSubmit && (
                     <>
-                      <Form className="form-border rounded mb-0"  >
+                      <Form className="form-border rounded mb-0">
                         <FormikControl
-                          className="w-250"
+                          className="boxsize"
                           control="textarea"
                           label="Address"
                           name="address"
                         />
                         <FormikControl
+                          // className="boxsize"
                           control="radio"
                           label="Gender"
                           name="genderOption"
                           options={genderOption}
                         />
                         <FormikControl
+                          className="boxsize"
                           control="input"
                           name="pincode"
                           label="Pincode"
                           type="text"
                           name="pincode"
                         />
+                        <FormikControl
+                          className="boxsize"
+                          control="select"
+                          label="Country"
+                          name="selectCountry"
+                          countryData={stateData}
+                          options={editField.countrySelect}
+                        />
+
                         {/* <FormikControl
+                          className="boxsize"
+                          control="select"
+                          label="State"
+                          name="selectState"
+                          countryData={stateData}
+                          options={editField.stateSelect}
+                        /> */}
+
+                        {/* <FormikControl
+                        className="boxsize"
                           control="select"
                           label="City"
                           name="selectCity"
                           options={cityOption}
                         /> */}
-                        {/* <FormikControl
-                          control="select"
-                          label="State"
-                          name="selectState"
-                          options={editField.stateSelect}
-                        /> */}
                         <FormikControl
-                          control="select"
-                          label="Country"
-                          name="selectCountry"
-                          options={editField.countrySelect}
-                        />
-                        <FormikControl
+                          className="boxsize"
                           control="date"
                           label="Birthdate"
                           name="birthDate"
@@ -249,7 +249,6 @@ const Profile = () => {
               </div>
               <div className="footerPosition">
                 <Footer />
-                
               </div>
             </div>
           )}

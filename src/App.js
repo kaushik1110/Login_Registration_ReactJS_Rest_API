@@ -19,7 +19,6 @@ function App() {
             path="/"
             render={() => {
               let obj = localStorage.getItem("Login");
-              console.log(obj);
               if (obj !== null) {
                 return <Profile />;
               } else return <LoginSignup />;

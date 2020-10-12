@@ -12,10 +12,10 @@ const Footer = () => {
                 Follow Us
               </h5>
               <a>
-                <i className="fa fa-linkedin fa-lg" aria-hidden="true"></i>
-                <i className="fa fa-facebook-official ml-2 fa-lg" aria-hidden="true"></i>
-                <i className="fa fa-instagram ml-2 fa-lg" aria-hidden="true"></i>
-                <i className="fa fa-envelope ml-2 fa-lg" aria-hidden="true"></i>
+                <i className="fa fa-linkedin fa-lg fa-2x" aria-hidden="true"></i>
+                <i className="fa fa-facebook-official fa-lg fa-2x fa-fw" aria-hidden="true"></i>
+                <i className="fa fa-instagram fa-lg fa-2x fa-fw" aria-hidden="true"></i>
+                <i className="fa fa-envelope  fa-lg fa-2x fa-fw" aria-hidden="true"></i>
               </a>
             </div>
           </div>

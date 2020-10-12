@@ -11,7 +11,6 @@ const ChakraInput = (props) => {
             {
 
                 ({ field, form }) => {
-                    console.log(form);
                     return (
                         <div className="textset form-group ">
                             <FormControl isInvalid={form.errors[name] && form.touched[name]}>
