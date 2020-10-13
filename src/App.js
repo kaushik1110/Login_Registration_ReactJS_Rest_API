@@ -30,6 +30,7 @@ function App() {
           <Route path="/header" component={Header} />
           <Route path="/home" component={Home} />
           <Route path="/dashboard" component={Dashboard} />
+          
         </Switch>
       </BrowserRouter>
     </div>

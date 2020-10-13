@@ -16,8 +16,12 @@ const Profile = () => {
     isEditSubmit: false,
   });
   const [editField, setEditField] = useState({
+    state: "",
+    country: "",
+    city: "",
     countrySelect: [],
     stateSelect: [],
+    citySelect: [],
   });
 
   const token = localStorage.getItem("login");
@@ -40,6 +44,7 @@ const Profile = () => {
       })
       .then((res) => {
         setProfile({
+          ...profile,
           name: res.data.name,
           email: res.data.email,
           image: res.data.image,
@@ -50,43 +55,45 @@ const Profile = () => {
       });
   }, [profile.name, profile.email, profile.image]);
 
-  // const cityOption = [
-  //   { key: "Select city", value: "" },
-  //   { key: "Surat", value: "Surat" },
-  //   { key: "Amdavad", value: "Amdavad" },
-  //   { key: "Rajkot", value: "Rajkot" },
-  // ];
-
-  const genderOption = [
-    { key: "Male", value: "Male" },
-    { key: "Female", value: "Female" },
+  const genderOptions = [
+    { key: "male", value: "male" },
+    { key: "female", value: "female" },
+    { key: "other", value: "other" },
   ];
   const hobbyOptions = [
     { key: "Option 1", value: "Option 1" },
     { key: "Option 2", value: "Option 2" },
     { key: "Option 3", value: "Option 3" },
   ];
+
   const initialValues = {
+    // address: "",
+    // zip: "",
+    // selectCountry: "",
+    // selectCity: "",
+    // selectState: "",
+    // genderOption: "",
+    // checkBoxOption: [],
+    // birthDate: null,
     address: "",
-    pincode: "",
-    selectCountry: "",
-    selectCity: "",
-    selectState: "",
-    genderOption: "",
-    cityOption: "",
-    checkBoxOption: [],
-    birthDate: null,
+    gender: "",
+    hobby: "",
+    birthdate: "",
+    zip: "",
+    country: "",
+    state: "",
+    city: "",
   };
 
   const validationSchema = Yup.object({
     address: Yup.string().required("Required !"),
-    // selectCountry: Yup.string().required("Required !"),
-    // selectCity: Yup.string().required("Required !"),
-    // selectState: Yup.string().required("Required !"),
-    genderOption: Yup.string().required("Required !"),
-    pincode: Yup.string().required("Required !"),
-    checkBoxOption: Yup.array().required("Required !"),
-    birthDate: Yup.date().required("Required !").nullable(),
+    // country: Yup.string().required("Required !"),
+    // state: Yup.string().required("Required !"),
+    // city: Yup.string().required("Required !"),
+    gender: Yup.string().required("Required !"),
+    hobby: Yup.array().required("Required !"),
+    birthdate: Yup.date().required("Required !").nullable(),
+    zip: Yup.string().required("Required !"),
   });
 
   const editButtonHandler = () => {
@@ -98,9 +105,8 @@ const Profile = () => {
     axios
       .get(`http://localhost:8000`)
       .then((res) => {
-        console.log(res.data);
-        debugger;
         setEditField({
+          ...editField,
           countrySelect: res.data,
         });
       })
@@ -110,153 +116,189 @@ const Profile = () => {
   };
 
   const stateData = (value) => {
-    debugger;
-    console.log(value);
-    // API-3
-    axios
-      .post(`http://localhost:8000/${value}`)
-      .then((res) => {
-        debugger;
-        setEditField({
-          stateSelect: res && res.data,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // API-3 State Data
+    {
+      !editField.country &&
+        axios
+          .post(`http://localhost:8000/${value}`)
+          .then((res) => {
+            console.log(res.data);
+            setEditField({
+              ...editField,
+              stateSelect: res.data,
+              country: value,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
+
+    // API-4 City Data
+    {
+      editField.country &&
+        axios
+          .post(`http://localhost:8000/${editField.country}/${value}`)
+          .then((res) => {
+            {
+              setEditField({
+                ...editField,
+                citySelect: res.data,
+                state: value,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
   };
-  const onSubmit = (values) => {
-    console.log("submit data", values);
-    // debugger;
+
+  const stateCountryData = (value) => {
+    setEditField({
+      ...editField,
+      city: value,
+    });
+  };
+
+  const data = (value) => {
+
+    console.log(value);
+    editField.country &&
+        axios
+          .post(`http://localhost:8000/${editField.country}/${value}`)
+          .then((res) => {
+            {
+              setEditField({
+                ...editField,
+                citySelect: res.data,
+                state: value,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+  };
+
+  const onSubmit = (value) => {
+    console.log("submit data", value);
+    debugger;
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={() => onSubmit()}
-    >
-      {(formik) => (
-        <div>
-          {token && (
-            <div className="footer">
-              <Header />
-              <div className="Bgcolor row">
-                <div className="col-1"></div>
-                <div className="col-2">
-                  <img
-                    src={`${profile.image}`}
-                    width="304"
-                    height="236"
-                    className="mt-3 rounded-circle float-left"
-                    alt="image not found"
-                  ></img>
-                  <button
-                    type=""
-                    className="text-white btn-dark w-75  ml-4 mt-3 "
-                    onClick={editButtonHandler}
-                  >
-                    Edit Profile
-                  </button>
-                </div>
-                <div className="col-1"></div>
-                <div className="col-5">
-                  <p className="profile mt-3 font-weight-bold text-xl-center ">
-                    Profile
-                  </p>
-                  <div className="border-welcome">
-                    <p className="welcome text-center">
-                      Welcome {profile.name} !
-                    </p>
-                  </div>
-                  {/* <p className="text-center">Email : {profile.email}</p> */}
-                  {profile.isEditSubmit && (
-                    <>
-                      <Form className="form-border rounded mb-0">
-                        <FormikControl
-                          className="boxsize"
-                          control="textarea"
-                          label="Address"
-                          name="address"
-                        />
-                        <FormikControl
-                          // className="boxsize"
-                          control="radio"
-                          label="Gender"
-                          name="genderOption"
-                          options={genderOption}
-                        />
-                        <FormikControl
-                          className="boxsize"
-                          control="input"
-                          name="pincode"
-                          label="Pincode"
-                          type="text"
-                          name="pincode"
-                        />
-                        <FormikControl
-                          className="boxsize"
-                          control="select"
-                          label="Country"
-                          name="selectCountry"
-                          countryData={stateData}
-                          options={editField.countrySelect}
-                        />
-
-                        {/* <FormikControl
-                          className="boxsize"
-                          control="select"
-                          label="State"
-                          name="selectState"
-                          countryData={stateData}
-                          options={editField.stateSelect}
-                        /> */}
-
-                        {/* <FormikControl
-                        className="boxsize"
-                          control="select"
-                          label="City"
-                          name="selectCity"
-                          options={cityOption}
-                        /> */}
-                        <FormikControl
-                          className="boxsize"
-                          control="date"
-                          label="Birthdate"
-                          name="birthDate"
-                        />
-                        <FormikControl
-                          control="checkbox"
-                          label="Hobby"
-                          name="checkBoxOption"
-                          options={hobbyOptions}
-                        />
-                        <div className="buttonsubmit">
-                          <button
-                            className="textset text-white btn btn-dark mt-1"
-                            type="submit"
-                            // onSubmit={() => onSubmit()}
-                          >
-                            Submit
-                          </button>
-                        </div>
-                      </Form>
-                    </>
-                  )}
-
-                  {/* </> */}
-                </div>
-              </div>
-              <div className="footerPosition">
-                <Footer />
-              </div>
-            </div>
-          )}
-          {!token && <LoginSignup />}
+    <div className="footer">
+      <Header />
+      <div className="Bgcolor row">
+        <div className="col-1"></div>
+        <div className="col-2">
+          <div>
+            <img
+              src={`${profile.image}`}
+              width="304"
+              height="236"
+              className="mt-3 rounded-circle float-left"
+              alt="image not found"
+            ></img>
+          </div>
+          <button
+            type=""
+            className="text-white btn-dark w-75  ml-4 mt-3 "
+            onClick={editButtonHandler}
+          >
+            Edit Profile
+          </button>
         </div>
-      )}
-    </Formik>
+        <div className="col-1"></div>
+        <div className="col-6">
+          <p className="profile mt-3 font-weight-bold text-xl-center ">
+            Profile
+          </p>
+          <div className="border-welcome">
+            <p className="welcome text-center">Welcome {profile.name} !</p>
+          </div>
+          {profile.isEditSubmit && (
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={onSubmit}
+            >
+              {(formik) => (
+                <Form className="form-border rounded mb-0">
+                  <FormikControl
+                    className="boxsize"
+                    control="textarea"
+                    label="Address"
+                    name="address"
+                  />
+                  <FormikControl
+                    // className="boxsize"
+                    control="radio"
+                    label="Gender"
+                    name="gender"
+                    options={genderOptions}
+                  />
+                  <FormikControl
+                    className="boxsize"
+                    control="input"
+                    name="zip"
+                    label="Pincode"
+                  />
+                  <FormikControl
+                    className="boxsize"
+                    control="select"
+                    label="Country"
+                    name="country"
+                    countryData={stateData}
+                    options={editField.countrySelect}
+                  />
+
+                  <FormikControl
+                    className="boxsize"
+                    control="select"
+                    label="State"
+                    name="state"
+                    countryData={stateData}
+                    options={editField.stateSelect}
+                  />
+
+                  <FormikControl
+                    className="boxsize"
+                    control="select"
+                    label="City"
+                    name="city"
+                    countryData={stateCountryData}
+                    options={editField.citySelect}
+                  />
+                  <FormikControl
+                    className="boxsize"
+                    control="date"
+                    label="Birthdate"
+                    name="birthdate"
+                  />
+                  <FormikControl
+                    control="checkbox"
+                    label="Hobby"
+                    name="hobby"
+                    options={hobbyOptions}
+                  />
+                  <div className="buttonsubmit">
+                    <button
+                      className="textset text-white btn btn-dark mt-1"
+                      type="submit"
+                      onSubmit={() => onSubmit()}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          )}
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 };
-
 export default Profile;

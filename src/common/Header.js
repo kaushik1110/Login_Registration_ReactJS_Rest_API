@@ -14,18 +14,42 @@ function Header() {
     });
   };
   
+  const homeHandler = () => {
+    history.push({
+      pathname: "/home",
+    });
+  }
+
+  const profileHandler = () => {
+    history.push({
+      pathname: "/profile",
+    });
+  }
+
+  const dashboardHandler = () => {
+    history.push({
+      pathname: "/dashboard",
+    });
+  }
+
+  const recordHandler = () => {
+    history.push({
+      pathname: "/",
+    });
+  }
+
   return (
     <div>
       <Navbar bg="info" variant="dark">
-        <Navbar.Brand href="#home">Profile</Navbar.Brand>
+        <Navbar.Brand onClick={homeHandler} href="#home">Home</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link className="text-light" href="#home">
-            Home
+          <Nav.Link className="text-light" onClick={profileHandler} href="#home">
+            Profile
           </Nav.Link>
-          <Nav.Link className="text-light" href="#features">
+          <Nav.Link className="text-light" onClick={dashboardHandler} href="#dashboard">
             Dashboard
           </Nav.Link>
-          <Nav.Link className="text-light" href="#pricing">
+          <Nav.Link className="text-light" onClick={recordHandler}href="#record">
             Record
           </Nav.Link>
          
