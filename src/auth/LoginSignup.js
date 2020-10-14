@@ -14,7 +14,7 @@ const LoginSignup = () => {
     },
     isLogin: false,
   });
-  const obj = localStorage.getItem("login");
+  const token = localStorage.getItem("login");
   const history = useHistory();
 
   const onSubmitForm = (event) => {
@@ -59,7 +59,7 @@ const LoginSignup = () => {
   };
   return (
     <div>
-      {!obj && (
+    {!token && (
         <div className="form ">
           <ToastContainer />
           <form onSubmit={(event) => onSubmitForm(event)}>
@@ -111,8 +111,8 @@ const LoginSignup = () => {
           </form>
         </div>
       )}
-      {obj && <Profile />}
-    </div>
+      {token && <Profile />}
+   </div>
   );
 };
 

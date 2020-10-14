@@ -23,6 +23,16 @@ const Profile = () => {
     stateSelect: [],
     citySelect: [],
   });
+  const [getData, setGetData] = useState({
+    address: "",
+    gender: "",
+    birthdate: "",
+    hobby: "",
+    zip: "",
+    country: "",
+    state: "",
+    city: "",
+  });
 
   const token = localStorage.getItem("login");
 
@@ -93,7 +103,7 @@ const Profile = () => {
     gender: Yup.string().required("Required !"),
     hobby: Yup.array().required("Required !"),
     birthdate: Yup.date().required("Required !").nullable(),
-    zip: Yup.string().required("Required !"),
+    zip: Yup.string().matches(/^[0-9]{6}$/, 'Must be 6 Digits').required("Required !").length(6),
   });
 
   const editButtonHandler = () => {
@@ -161,29 +171,41 @@ const Profile = () => {
     });
   };
 
-  const data = (value) => {
-
-    console.log(value);
-    editField.country &&
-        axios
-          .post(`http://localhost:8000/${editField.country}/${value}`)
-          .then((res) => {
-            {
-              setEditField({
-                ...editField,
-                citySelect: res.data,
-                state: value,
-              });
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-  };
-
   const onSubmit = (value) => {
-    console.log("submit data", value);
-    debugger;
+    let data = {
+      address: value.address,
+      gender: value.gender,
+      hobby: value.hobby,
+      birthdate: value.birthdate,
+      zip: value.zip,
+      country: value.country,
+      state: value.state,
+      city: value.city,
+    };
+    debugger
+    axios
+      .post(`http://localhost:3000/api/addUserInfo`, data, {
+        headers: {
+          "authentication-token": `${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setGetData({
+          address: response.data.address,
+          gender: response.data.gender,
+          birthdate: response.data.birthdate,
+          hobby: response.data.hobby,
+          zip: response.data.zip,
+          country: response.data.country,
+          state: response.data.state,
+          city: response.data.city,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

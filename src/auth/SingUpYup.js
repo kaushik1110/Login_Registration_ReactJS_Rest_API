@@ -3,10 +3,11 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import Home from "../page/Home";
 import { Formik, useFormik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import TextError from "./TextError";
+import { Dimmer, Loader, Segment, Image } from "semantic-ui-react";
+import { BallBeat } from "react-pure-loaders";
 
 function SingUpYup() {
   const history = useHistory();
@@ -16,20 +17,16 @@ function SingUpYup() {
     email: "",
     password: "",
     confirmPassword: "",
-    comments: "",
-    address: "",
-    social: {
-      facebook: "",
-      twitter: "",
-    },
-    phoneNumbers: [""],
-    uploadImage: "",
+    // uploadImage: "",
     selectedFile: null,
   };
-  const [image, setImage] = useState();
+  const [image, setImage] = useState({
+    file: null,
+    loading: true,
+  });
   const onSubmit = (value) => {
     const singUpImage = new FormData();
-    singUpImage.append("file", image);
+    singUpImage.append("file", image.file);
     singUpImage.append("name", value.name);
     singUpImage.append("email", value.email);
     singUpImage.append("password", value.password);
@@ -45,6 +42,9 @@ function SingUpYup() {
           history.push({
             pathname: "/",
           });
+    // <div>
+    //   <BallBeat color={"#123abc"} loading={image.loading} />
+    // </div>;
         }
       })
       .catch((error) => {
@@ -52,23 +52,22 @@ function SingUpYup() {
       });
   };
   const validationSchema = Yup.object({
-    // name: Yup.string().required("Required"),
-    // email: Yup.string().email("Invalid email format").required("Required"),
-    // password: Yup.string()
-    //   .required("Invalid password format")
-    //   .required("Required"),
-    // confirmPassword: Yup.string()
-    //   .oneOf([Yup.ref("password"), null], "Passwords must match")
-    //   .required("Required !"),
-    // comments: Yup.string().required("Required"),
-    // address: Yup.string().required("Required"),
-    // uploadImage: Yup.string().required("Required"),
+    name: Yup.string().required("Required !"),
+    email: Yup.string().email("Invalid email format").required("Required !"),
+    password: Yup.string()
+      // .min(8, "at least 8 chars")
+      // .matches(/[a-z]/, "at least one lowercase char")
+      // .matches(/[A-Z]/, "at least one uppercase char")
+      // .matches(
+      //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      //   "at least 1 number and special char (@,!,#, etc)."
+      // )
+      .required("Required !"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Required !"),
+    // uploadImage: Yup.string().required("Required !"),
   });
-  // const formik = useFormik({
-  //   initialValues,
-  //   onSubmit,
-  //   validationSchema,
-  // });
 
   const loginHandler = () => {
     history.push({
@@ -77,24 +76,13 @@ function SingUpYup() {
   };
 
   const fileUploadHandler = (event) => {
-    setImage(event.target.files[0]);
+    // setImage(event.target.files[0]);
+    setImage({
+      file: event.target.files[0],
+      //   // file: URL.createObjectURL(event.target.files[0]),
+    });
   };
 
-  // const uploadHandler = () => {
-  //   const singUpImage = new FormData();
-  //   singUpImage.append("image", Image.selectedFile, Image.selectedFile.name);
-  //   axios
-  //     .post("http://localhost:3000/api/", singUpImage)
-  //     // onUploadProgress: ProgressEvent => {
-  //     //    console.log('Upload Progress: '+ (ProgressEvent.loaded / ProgressEvent.total*100) + '%');
-  //     // }
-  //     .then((res) => {
-  //       console.log(res);
-  //     });
-  // };
-
-  // const obj = localStorage.getItem("login");
-  // console.log("visited field", formik.touched);
   return (
     <Formik
       initialValues={initialValues}
@@ -176,109 +164,28 @@ function SingUpYup() {
                 <div className="col-md-4 mb-3">
                   <label style={{ fontSize: 20 }}>Upload Image: </label>
                   <Field name="file" type="file" onChange={fileUploadHandler} />
-                  {/* <ErrorMessage name="uploadImage">
-                    {(errorMsg) => (
-                      <div style={{ color: "red" }}>{errorMsg}</div>
-                    )}
-                  </ErrorMessage> */}
-                </div>
-
-                <div className="col-md-4 mb-3">
-                  <label style={{ fontSize: 20 }}>Comments</label>
-                  <Field
-                    as="textarea"
-                    // type="password"
-                    id="comments"
-                    name="comments"
-                    className="form-control"
-                    placeholder="Enter comments"
-                  />
-                  <ErrorMessage name="comments">
-                    {(errorMsg) => (
-                      <div style={{ color: "red" }}>{errorMsg}</div>
-                    )}
-                  </ErrorMessage>
-                </div>
-
-                <div className="col-md-4 mb-3">
-                  <label style={{ fontSize: 20 }}>Address</label>
-                  <Field name="address">
-                    {(props) => {
-                      const { field, form, meta } = props;
-                      console.log("render props", props);
-                      return (
-                        <div>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="address"
-                            {...field}
-                          />
-                          {meta.touched && meta.error ? (
-                            <div style={{ color: "red" }}>{meta.error}</div>
-                          ) : null}
-                        </div>
-                      );
-                    }}
-                  </Field>
-                  <ErrorMessage name="address">
-                    {(errorMsg) => (
-                      <div style={{ color: "red" }}>{errorMsg}</div>
-                    )}
-                  </ErrorMessage>
-                </div>
-
-                <div className="col-md-4 mb-3">
-                  <label htmlFor="facebook" style={{ fontSize: 20 }}>
-                    Facebook profile
-                  </label>
-                  <Field
-                    type="text"
-                    id="facebook"
-                    className="form-control"
-                    name="social.facebook"
-                  />
-                </div>
-
-                <div className="col-md-4 mb-3">
-                  <label htmlFor="twitter" style={{ fontSize: 20 }}>
-                    Twitter profile
-                  </label>
-                  <Field
-                    type="text"
-                    id="twitter"
-                    className="form-control"
-                    name="social.twitter"
-                  />
-                </div>
-
-                <div className="col-md-4 mb-3">
-                  <label htmlFor="primaryPh" style={{ fontSize: 20 }}>
-                    Primary Phone No.
-                  </label>
-                  <Field
-                    type="tel"
-                    id="primaryPh"
-                    className="form-control"
-                    name="phoneNumbers[0]"
-                  />
-                </div>
-
-                <div className="col-md-4 mb-3">
-                  <label htmlFor="secondaryPh" style={{ fontSize: 20 }}>
-                    Secondary Phone No.
-                  </label>
-                  <Field
-                    type="tel"
-                    id="secondaryPh"
-                    className="form-control"
-                    name="phoneNumbers[1]"
-                  />
+                  {
+                    image.file && (
+                      // ? (
+                      <img
+                        src={URL.createObjectURL(image.file)}
+                        className="mt-3"
+                      />
+                    )
+                    // ) : (
+                    //   <ErrorMessage name="uploadImage">
+                    //     {(errorMsg) => (
+                    //       <div style={{ color: "red" }}>{errorMsg}</div>
+                    //     )}
+                    //   </ErrorMessage>
+                    // )
+                  }
                 </div>
 
                 <button
                   type="submit"
-                  disabled={!formik.isValid || formik.isSubmitting}
+                  // disabled={!formik.isValid || formik.isSubmitting}
+                  onSubmit={() => onSubmit()}
                   className="btn ml-3 btn-primary text-white"
                 >
                   SingUp
@@ -290,6 +197,9 @@ function SingUpYup() {
                 >
                   Back
                 </button>
+                {/* <div>
+                  <BallBeat color={"#123abc"} loading={image.loading} />
+                </div> */}
               </div>
             </Form>
           </div>
