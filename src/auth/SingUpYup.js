@@ -3,11 +3,11 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Formik, useFormik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import TextError from "./TextError";
-import { Dimmer, Loader, Segment, Image } from "semantic-ui-react";
-import { BallBeat } from "react-pure-loaders";
+// import { Dimmer, Loader, Segment, Image } from "semantic-ui-react";
+// import { BallBeat } from "react-pure-loaders";
 
 function SingUpYup() {
   const history = useHistory();

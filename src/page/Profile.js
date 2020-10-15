@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import LoginSignup from "../auth/LoginSignup";
+// import LoginSignup from "../auth/LoginSignup";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
 import axios from "axios";

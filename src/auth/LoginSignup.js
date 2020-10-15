@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import Profile from "../page/Profile";
-import Home from "../page/Home";
+// import Home from "../page/Home";
 
 const LoginSignup = () => {
   const [login, setlogin] = useState({
@@ -88,10 +88,6 @@ const LoginSignup = () => {
                   value={login.detail.password}
                   onChange={(event) => formChangeHandler(event)}
                 />
-              </div>
-              <div className="form-group form-check ml-3">
-                <input type="checkbox" className="form-check-input" />
-                <label className="form-check-label">Check me out</label>
               </div>
               <button
                 type="submit"

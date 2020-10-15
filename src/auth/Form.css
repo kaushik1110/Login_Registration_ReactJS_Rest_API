@@ -1,12 +1,12 @@
 .row {
   margin-right: 0px !important;
 }
- 
+
 .Bgcolor {
   background-color: whitesmoke;
   height: 850px;
 }
-.footercolor{
+.footercolor {
   background-color: whitesmoke;
 }
 .button-right {
@@ -15,12 +15,12 @@
 }
 .border-welcome {
   border: 3px solid black;
-  background-color:white;
+  background-color: white;
 }
 .welcome {
   font-size: x-large;
   -webkit-text-stroke: thin;
-  background-color:white;
+  background-color: white;
   height: 40px;
   margin-top: 10px;
 }
@@ -34,36 +34,51 @@
   border: 1px solid black;
   padding: 20px;
   -webkit-text-stroke-width: thin;
-  background-color:white;
+  background-color: white;
 }
-.textset{
+.form {
+  -webkit-text-stroke: thin;
+}
+.form-border {
+  border: 1px solid black;
+}
+.textset {
   display: flex;
   align-items: center;
   margin: 10px;
   justify-content: space-between;
   /* font-size: large; */
 }
-.sizetext{
+.sizetext {
   font-size: initial;
 }
-.formsubmit{
+.formsubmit {
   position: absolute;
   right: 40px;
 }
-.buttonsubmit{
+.buttonsubmit {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin-right: 30px;
 }
-.footerPosition{
+.footerPosition {
   /* position: fixed;  */
   bottom: 0;
   width: 100%;
-   text-align: center;
-} 
-.boxsize{
+  text-align: center;
+}
+.boxsize {
   width: 250px;
+}
+.help-block {
+  color: #b94a48;
+}
+.radioButton {
+  margin-left: 200px;
+}
+.datepicker {
+  firstday: 0;
 }
 /* .fa {
   padding: 20px;
@@ -151,13 +166,13 @@ h1 {
 
 
 */
-  /* .footer { 
+/* .footer { 
      min-height: calc(100vh - 40px);
      position: fixed;
      left: 0;
      bottom: 0;
      width: 100%;
      /* background-color: red; */
-     /* color: white; */
-     /* text-align: center; */
-  /* }  */
+/* color: white; */
+/* text-align: center; */
+/* }  */
