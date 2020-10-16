@@ -69,7 +69,7 @@ const userInfoValidation = data => {
         birthdate: Joi.date()
             .required(),
 
-        hobby: Joi.string()
+        hobby: Joi.array()
             .required(),
 
         zip: Joi.number()

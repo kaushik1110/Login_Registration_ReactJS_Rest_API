@@ -4,15 +4,16 @@ import LoginSignup from "../auth/LoginSignup";
 import Header from "../common/Header";
 
 function Home() {
-  const obj = localStorage.getItem("login");
+  const token = localStorage.getItem("token");
 
   const onLogoutForm = () => {
     localStorage.clear();
   };
 
+  debugger
   return (
     <div>
-      {obj ? (
+      {token ? (
         <div className="footer">
           <div>
           <Header />

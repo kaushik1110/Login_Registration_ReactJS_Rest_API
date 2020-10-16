@@ -5,7 +5,7 @@ export class HomeClass extends Component {
   clickLogout = () => {
     localStorage.clear();
   };
-  obj = localStorage.getItem("login");
+  obj = localStorage.getItem("token");
 
   render() {
     return (

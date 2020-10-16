@@ -13,7 +13,7 @@ const SignUp = () => {
       password: "",
     },
   });
-  const obj = localStorage.getItem("login");
+  const obj = localStorage.getItem("token");
   const history = useHistory();
   const onSubmitForm = (event) => {
     event.preventDefault();

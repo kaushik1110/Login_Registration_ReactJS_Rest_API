@@ -33,7 +33,7 @@ const userInfo = new mongoose.Schema({
         required: true
     },
     hobby:{
-        type: String,
+        type: Array,
         required: true,
         min: 1,
         max: 20

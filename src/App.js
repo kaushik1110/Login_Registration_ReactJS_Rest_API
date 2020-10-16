@@ -20,9 +20,9 @@ function App() {
             exact
             path="/"
             render={() => {
-              let obj = localStorage.getItem("Login");
-              if (obj !== null) {
-                return <ProfilePage />;
+              let token = localStorage.getItem("token");
+              if (token !== null) {
+                return <Home />;
               } else return <LoginSignup />;
             }}
           />

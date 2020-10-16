@@ -34,7 +34,7 @@ const Profile = () => {
     city: "",
   });
 
-  const token = localStorage.getItem("login");
+  const token = localStorage.getItem("token");
 
   // const editChangeHandler = (event) => {
   //   setEditField({

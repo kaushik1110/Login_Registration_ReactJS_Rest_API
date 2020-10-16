@@ -64,7 +64,7 @@ function SignUpFormik() {
     });
   };
 
-  const obj = localStorage.getItem("login");
+  const obj = localStorage.getItem("token");
   console.log("visited field", formik.touched);
   return (
     <div>

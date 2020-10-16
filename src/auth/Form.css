@@ -80,6 +80,10 @@
 .datepicker {
   firstday: 0;
 }
+.image-size{
+  margin-top: 4px;
+  height: 250px;
+}
 /* .fa {
   padding: 20px;
   font-size: 30px;

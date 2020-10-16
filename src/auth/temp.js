@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import FormikControl from '../common/FormikControl'
 
 const Profile = () => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('login')
 
     const [edit, setEdit] = useState({
         isEdit: false,

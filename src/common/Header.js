@@ -32,26 +32,22 @@ function Header() {
     });
   }
 
-  const recordHandler = () => {
-    history.push({
-      pathname: "/",
-    });
-  }
 
   return (
     <div>
       <Navbar bg="info" variant="dark">
-        <Navbar.Brand onClick={homeHandler} href="#home">Home</Navbar.Brand>
+        <Navbar.Brand href="#home">Details</Navbar.Brand>
         <Nav className="mr-auto">
+        <Nav.Link className="text-light" onClick={homeHandler} href="#home">
+            Home
+          </Nav.Link>
           <Nav.Link className="text-light" onClick={profileHandler} href="#home">
             Profile
           </Nav.Link>
           <Nav.Link className="text-light" onClick={dashboardHandler} href="#dashboard">
             Dashboard
           </Nav.Link>
-          <Nav.Link className="text-light" onClick={recordHandler}href="#record">
-            Record
-          </Nav.Link>
+          
          
           <Button 
             className="button-right text-white bg-dark" 

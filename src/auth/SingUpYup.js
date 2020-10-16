@@ -169,7 +169,7 @@ function SingUpYup() {
                       // ? (
                       <img
                         src={URL.createObjectURL(image.file)}
-                        className="mt-3"
+                        className="image-size"
                       />
                     )
                     // ) : (

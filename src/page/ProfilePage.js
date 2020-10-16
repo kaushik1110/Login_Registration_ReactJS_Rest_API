@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
 import axios from "axios";
-import * as Yup from "yup";
 import "../auth/Form.css";
 
 const ProfilePage = () => {
@@ -12,10 +11,8 @@ const ProfilePage = () => {
     image: "",
     isEditSubmit: false,
   });
+  // const [data,setData]=useState(faLSE);
   const [editField, setEditField] = useState({
-    state: "",
-    country: "",
-    city: "",
     countrySelect: [],
     stateSelect: [],
     citySelect: [],
@@ -31,7 +28,18 @@ const ProfilePage = () => {
     city: "",
   });
 
-  const token = localStorage.getItem("login");
+  const [info, setInfo] = useState({
+    address: "",
+    gender: "",
+    birthdate: "",
+    country: "",
+    state: "",
+    city: "",
+    hobby: [],
+    zip: "",
+  });
+
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     // API-1
@@ -53,13 +61,93 @@ const ProfilePage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [profile.name, profile.email, profile.image]);
+
+    axios
+      .get(`${process.env.REACT_APP_LINK}/api/addUserInfo/getdata`, {
+        headers: {
+          "authentication-token": `${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setInfo({
+          address: response.data.address,
+          gender: response.data.gender,
+          birthdate: response.data.birthdate,
+          country: response.data.country,
+          state: response.data.state,
+          city: response.data.city,
+          hobby: response.data.hobby,
+          zip: response.data.zip,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [profile.name, profile.email, profile.image, info]);
+
+  useEffect(() => {
+    {
+      getData &&
+        getData.country &&
+        axios
+          .post(`http://localhost:8000/${getData.country}`)
+          .then((response) => {
+            {
+              response &&
+                response.data &&
+                setEditField({
+                  ...editField,
+                  stateSelect: response.data,
+                });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
+    {
+      getData &&
+        getData.state &&
+        axios
+          .post(`http://localhost:8000/${getData.country}/${getData.state}`)
+          .then((response) => {
+            debugger;
+            {
+              response &&
+                response.data &&
+                setEditField({
+                  ...editField,
+                  citySelect: response.data,
+                });
+            }
+          })
+          .catch((error) => {
+            debugger;
+            console.log(error);
+          });
+    }
+  }, [getData.country, getData.state]);
 
   const editButtonHandler = () => {
     setProfile({
       ...profile,
-      isEditSubmit: !profile.isEditSubmit,
+      isEditSubmit: true,
     });
+    {
+      info &&
+        info.address &&
+        setGetData({
+          address: info.address,
+          gender: info.gender,
+          birthdate: info.birthdate,
+          country: info.country,
+          state: info.state,
+          city: info.city,
+          hobby: info.hobby,
+          zip: info.zip,
+        });
+    }
     // API-2 Country Data
     axios
       .get(`http://localhost:8000`)
@@ -74,52 +162,11 @@ const ProfilePage = () => {
       });
   };
 
-  
-  // const stateData = (value) => {
-  //   // API-3 State Data
-  //   {
-  //     !editField.country &&
-  //       axios
-  //         .post(`http://localhost:8000/${value}`)
-  //         .then((res) => {
-  //           console.log(res.data);
-  //           setEditField({
-  //             ...editField,
-  //             stateSelect: res.data,
-  //             country: value,
-  //           });
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         });
-  //   }
-
-  //   // API-4 City Data
-  //   {
-  //     editField.country &&
-  //       axios
-  //         .post(`http://localhost:8000/${editField.country}/${value}`)
-  //         .then((res) => {
-  //           {
-  //             setEditField({
-  //               ...editField,
-  //               citySelect: res.data,
-  //               state: value,
-  //             });
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         });
-  //   }
-  // };
-
   const editFormHandler = (event) => {
     setGetData({
       ...getData,
       [event.target.name]: event.target.value,
     });
-    // console.log(event.target.value);
   };
 
   const hobbyHandler = (event) => {
@@ -128,35 +175,31 @@ const ProfilePage = () => {
       hobby: [...getData.hobby, event.target.value],
     });
   };
-  console.log(getData);
-  const onSubmit = (value) => {
-    console.log(value);
-    debugger;
-    // axios
-    //   .post(`http://localhost:3000/api/addUserInfo`, getData, {
-    //     headers: {
-    //       "authentication-token": `${token}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //     setGetData({
-    //       address: response.data.address,
-    //       gender: response.data.gender,
-    //       birthdate: response.data.birthdate,
-    //       hobby: response.data.hobby,
-    //       zip: response.data.zip,
-    //       country: response.data.country,
-    //       state: response.data.state,
-    //       city: response.data.city,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  };
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+    // const isValid = { validate }
+    // if (isValid) {
+
+    axios
+      .post(`http://localhost:3000/api/addUserInfo`, getData, {
+        headers: {
+          "authentication-token": `${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setGetData({
+          isEdit: false,
+          isInfo: false,
+        });
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // }
+  };
   return (
     <div>
       <Header />
@@ -192,7 +235,11 @@ const ProfilePage = () => {
           {profile.isEditSubmit && (
             <div className="form-border mt-sm-3 card card-outline-secondary">
               <div className="card-body">
-                <form className="form" role="form">
+                <form
+                  className="form"
+                  role="form"
+                  onSubmit={(event) => submitHandler(event)}
+                >
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">
                       Address
@@ -207,7 +254,7 @@ const ProfilePage = () => {
                       />
                     </div>
                   </div>
-                  <div className="ml-0 mb-0 form-group row">
+                  <div className="ml-0 mb-0 form-group row" onChange={editFormHandler}>
                     <label>Gender</label>
                     <div className="radioButton form-group row">
                       <div className="form-check form-check-inline ">
@@ -217,8 +264,7 @@ const ProfilePage = () => {
                             type="radio"
                             name="gender"
                             value="Male"
-                            onChange={editFormHandler}
-                          />{" "}
+                          />
                           Male
                         </label>
                       </div>
@@ -229,8 +275,7 @@ const ProfilePage = () => {
                             type="radio"
                             name="gender"
                             value="female"
-                            onChange={editFormHandler}
-                          />{" "}
+                          />
                           Female
                         </label>
                       </div>
@@ -242,8 +287,8 @@ const ProfilePage = () => {
                             name="gender"
                             value="gender"
                             disabled=""
-                            onChange={editFormHandler}
-                          />{" "}
+                            
+                          />
                           Other
                         </label>
                       </div>
@@ -270,12 +315,19 @@ const ProfilePage = () => {
                       Country
                     </label>
                     <div className="col-lg-9">
-                      <select className="form-control" name="country" size="0">
-                        {editField.countrySelect.map((countryname, index) => (
-                          <option key={index} value={countryname.code}>
-                            {countryname.name}
-                          </option>
-                        ))}
+                      <select
+                        className="form-control"
+                        name="country"
+                        size="0"
+                        onChange={editFormHandler}
+                      >
+                        {editField.countrySelect.map((countryname, index) => {
+                          return (
+                            <option key={index} value={countryname.code}>
+                              {countryname.name}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </div>
@@ -285,12 +337,22 @@ const ProfilePage = () => {
                       State
                     </label>
                     <div className="col-lg-9">
-                      <select className="form-control" name="state" size="0">
-                      {editField.stateSelect.map((statename, index) => (
-                          <option key={index} value={statename.code}>
-                            {statename.name}
-                          </option>
-                        ))}
+                      <select
+                        className="form-control"
+                        name="state"
+                        size="0"
+                        onChange={editFormHandler}
+                      >
+                        <option key="" value="">
+                          Select a option
+                        </option>
+                        {editField.stateSelect.map((statename, index) => {
+                          return (
+                            <option key={index} value={statename}>
+                              {statename}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </div>
@@ -300,10 +362,22 @@ const ProfilePage = () => {
                       City
                     </label>
                     <div className="col-lg-9">
-                      <select className="form-control" name="city" size="0">
-                        <option onChange={editFormHandler}></option>
-                        {/* <option onChange={editFormHandler}>Amdavad</option>
-                        <option onChange={editFormHandler}>Rajkot</option> */}
+                      <select
+                        className="form-control"
+                        name="city"
+                        size="0"
+                        onChange={editFormHandler}
+                      >
+                        <option key="" value="">
+                          Select a option
+                        </option>
+                        {editField.citySelect.map((cityname, index) => {
+                          return (
+                            <option key={index} value={cityname}>
+                              {cityname}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </div>
@@ -336,7 +410,7 @@ const ProfilePage = () => {
                             name="hobby"
                             onChange={hobbyHandler}
                           />
-                          Cricket
+                          Sport
                         </label>
                       </div>
                       <div className="form-check-inline">
@@ -368,15 +442,83 @@ const ProfilePage = () => {
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label"></label>
                     <div className="col-lg-9">
-                      <input
+                      {/* <input
                         type="button"
                         className="text-white bg-dark btn btn-outline-info"
                         value="Save Changes"
-                        onClick={() => onSubmit()}
-                      />
+                        // onClick={() => onSubmit()}
+                      /> */}
+                      <button
+                        type="submit"
+                        className="btn btn-primary rounded-pill "
+                      >
+                        Save
+                      </button>
                     </div>
                   </div>
                 </form>
+              </div>
+            </div>
+          )}
+          {info.address && (
+            <div className="block mt-5 p-3">
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label ">Address:</label>
+                </div>
+                <div className="col-10">{info.address}</div>
+              </div>
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label cf">Gender: </label>
+                </div>
+                <div className="col-10 " onChange={editFormHandler}>
+                  <div className="form-check-inline ml-2">
+                    <label className="form-check-label ">{info.gender}</label>
+                  </div>
+                </div>
+              </div>
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label">Date of birth: </label>
+                </div>
+                <div className="col-10">{info.birthdate}</div>
+              </div>
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label">Country: </label>
+                </div>
+                <div className="col-10">{info.country}</div>
+              </div>
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label">State: </label>
+                </div>
+                <div className="col-10">{info.state}</div>
+              </div>
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label">City: </label>
+                </div>
+                <div className="col-10">{info.city}</div>
+              </div>
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label cf">Hobbies: </label>
+                </div>
+                <div className="col-10">
+                  <div className="form-check-inline">
+                    <label className="form-check-label ml-2">
+                      {info.hobby}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="row align-items-center mt-3">
+                <div className="col-2">
+                  <label className="form-label">Pincode</label>
+                </div>
+                <div className="col-10">{info.zip}</div>
               </div>
             </div>
           )}
